@@ -3,83 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAI Secure Gateway</title>
+    <title>RAI - Artificial General Intelligence</title>
     <style>
+        * { box-sizing: border-box; }
         body {
-            background-color: #0d0d1a;
+            background: radial-gradient(circle, #080c14 0%, #020408 100%);
             color: #00ffaa;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
-        .login-box {
-            background: rgba(20, 20, 35, 0.9);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid #00ffaa;
-            box-shadow: 0 0 30px rgba(0, 255, 170, 0.3);
-            text-align: center;
-            width: 320px;
-        }
-        h2 { margin-bottom: 5px; color: #ffffff; letter-spacing: 2px; }
-        p { color: #8888aa; font-size: 14px; margin-bottom: 30px; }
-        .btn {
-            background: transparent;
+        .panel {
+            background: rgba(5, 12, 24, 0.95);
             border: 2px solid #00ffaa;
-            color: #00ffaa;
-            padding: 12px 20px;
-            margin: 10px 0;
+            border-radius: 12px;
+            padding: 30px;
+            width: 380px;
+            box-shadow: 0 0 40px rgba(0, 255, 170, 0.2);
+            text-align: center;
+            display: none;
+        }
+        .active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        
+        .logo-container {
+            margin-bottom: 15px;
+        }
+        .logo-img {
+            width: 80px;
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 170, 0.6));
+        }
+
+        h2 { font-size: 18px; letter-spacing: 2px; margin-bottom: 20px; text-shadow: 0 0 10px #00ffaa; line-height: 1.4; }
+        p { color: #88a49e; font-size: 13px; margin-bottom: 20px; }
+        input[type="text"], input[type="password"] {
             width: 100%;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #02060c;
+            border: 1px solid #00ffaa;
+            color: #fff;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid #00ffaa;
+            color: #00ffaa;
             font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
             transition: 0.3s;
         }
-        .btn:hover {
-            background: #00ffaa;
-            color: #0d0d1a;
-            box-shadow: 0 0 20px #00ffaa;
-        }
-        input[type="password"] {
-            width: 92%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border: 1px solid #00ffaa;
-            background: #141423;
-            color: #fff;
-            text-align: center;
-        }
+        .btn:hover { background: #00ffaa; color: #020408; box-shadow: 0 0 15px #00ffaa; }
+        .btn-danger { border-color: #ff3366; color: #ff3366; }
+        .btn-danger:hover { background: #ff3366; color: #fff; box-shadow: 0 0 15px #ff3366; }
+        .status { font-size: 12px; margin-top: 15px; color: #ff3366; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
 
-<div class="login-box">
-    <h2>RAI SYSTEM</h2>
-    <p>Authentication Required</p>
-    
-    <input type="password" id="pass" placeholder="Enter RAI Master Password">
-    
-    <button class="btn" onclick="verifyBiometric()">Scan Fingerprint / Face</button>
-    
-    <button class="btn" onclick="verifyVoice()">Verify Voice Command</button>
-    
-    <button class="btn" id="downloadBtn" style="display:none; background:#00ffaa; color:#0d0d1a;">Download RAI APK</button>
+<div id="step-login" class="panel active">
+    <div class="logo-container">
+        <img src="logo.png" alt="RAI Core" class="logo-img">
+    </div>
+    <h2>RAI - ARTIFICIAL GENERAL INTELLIGENCE</h2>
+    <p>[CORE VAULT ACCESS]: LOGIN REQUIRED</p>
+    <input type="text" id="input-user" placeholder="Enter User ID">
+    <input type="password" id="input-pass" placeholder="Enter Password">
+    <button class="btn" onclick="checkLogin()">UNLOCK VAULT</button>
+    <div class="status" id="status-login" style="color: #00ffaa;">Loading RAI Core Settings...</div>
+</div>
+
+<div id="step-dash" class="panel">
+    <div class="logo-container">
+        <img src="logo.png" alt="RAI Core" class="logo-img">
+    </div>
+    <h2>RAI CORE ACTIVE</h2>
+    <p>Welcome, Mehsar Reza</p>
+    <button class="btn" style="background:#00ffaa; color:#000; margin-bottom: 15px;" onclick="window.location.href='https://mehsarreza374.github.io/rai/RAI.apk'">📥 DOWNLOAD RAI APK</button>
+    <button class="btn" style="border-color: #00b3ff; color: #00b3ff;" onclick="showStep('step-settings')">⚙️ CORE SETTINGS</button>
+</div>
+
+<div id="step-settings" class="panel">
+    <div class="logo-container">
+        <img src="logo.png" alt="RAI Core" class="logo-img">
+    </div>
+    <h2>CORE SETTINGS</h2>
+    <p>CHANGE MASTER PASSWORD</p>
+    <input type="password" id="new-pass" placeholder="Enter New Password">
+    <input type="password" id="confirm-pass" placeholder="Confirm New Password">
+    <button class="btn" onclick="updatePassword()">GENERATE NEW CONFIG</button>
+    <button class="btn btn-danger" onclick="showStep('step-dash')">BACK TO VAULT</button>
+    <div class="status" id="status-settings" style="color:#00b3ff; font-size: 11px; margin-top: 15px;">
+        Note: Generating config will download a file.
+    </div>
 </div>
 
 <script>
-    function verifyBiometric() {
-        alert("RAI Biometric Core: Scanner Initiated...");
+    let validUser = "";
+    let masterPassword = "";
+
+    window.onload = function() {
+        fetch('config.json')
+        .then(response => response.json())
+        .then(data => {
+            validUser = data.userId;
+            masterPassword = data.masterPassword;
+            document.getElementById('status-login').innerText = "System Status: Secure";
+            document.getElementById('status-login').style.color = "#00ffaa";
+        })
+        .catch(err => {
+            document.getElementById('status-login').innerText = "ERROR: config.json missing!";
+        });
+    };
+
+    // Keep it as a simple logic transition without menu option arrays
+    function showStep(stepId) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(stepId).classList.add('active');
     }
 
-    function verifyVoice() {
-        alert("RAI Voice Core: Listening for Master Voice...");
+    function checkLogin() {
+        let userEntered = document.getElementById('input-user').value;
+        let passEntered = document.getElementById('input-pass').value;
+        if(userEntered === validUser && passEntered === masterPassword) {
+            showStep('step-dash');
+        } else {
+            document.getElementById('status-login').innerText = "ERROR: INVALID USER ID OR PASSWORD";
+            document.getElementById('status-login').style.color = "#ff3366";
+        }
+    }
+
+    // Export generated configuration safely 
+    function updatePassword() {
+        let newPass = document.getElementById('new-pass').value;
+        let confirmPass = document.getElementById('confirm-pass').value;
+        let status = document.getElementById('status-settings');
+
+        if(newPass === "" || confirmPass === "") {
+            status.innerText = "Error: Fields cannot be empty!";
+            status.style.color = "#ff3366";
+            return;
+        }
+        if(newPass !== confirmPass) {
+            status.innerText = "Error: Passwords do not match!";
+            status.style.color = "#ff3366";
+            return;
+        }
+
+        let newConfigData = {
+            "userId": validUser,
+            "masterPassword": newPass
+        };
+
+        let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(newConfigData, null, 2));
+        let downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", "config.json");
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+
+        status.innerText = "SUCCESS: New config.json downloaded! Replace it in GitHub repository.";
+        status.style.color = "#00ffaa";
+        masterPassword = newPass;
     }
 </script>
 
 </body>
 </html>
+
